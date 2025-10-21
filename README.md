@@ -6,6 +6,21 @@ Passive OSINT lookups for IPs and domains with a clean terminal UI.
 - Optional enrichments when API keys provided (VirusTotal, IP2Whois, IPinfo, etc.).
 - Pretty Rich panels or machine-readable JSON/YAML/Markdown output.
 
+## Installing `wib`
+
+```sh
+pip install wib-osint
+```
+## Usage
+
+```sh
+wib 1.1.1.1
+wib google.com
+wib --dns google.com
+wib api[.]google[.]com -A
+python -m wib.main google.com --output json
+```
+
 ## Install (dev)
 
 Windows-friendly steps (PowerShell or zsh on Windows):
@@ -19,16 +34,7 @@ pip install -e ".[dev]"
 
 Note for zsh: square brackets are glob characters. Always quote extras (".[dev]") or escape them (\.\[dev\]) to avoid "no matches found".
 
-## Usage
-
-```sh
-wib 1.1.1.1
-wib google.com
-wib --dns google.com
-wib api[.]google[.]com -A
-python -m wib.main google.com --output json
-```
-
+##
 Global flags:
 
 - -A/--all: enable all optional enrichments for which keys are configured
