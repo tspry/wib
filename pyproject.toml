@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wib"
+version = "1.0.0"
+description = "Passive OSINT lookups for IPs and domains with a clean terminal UI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "tspry" }]
+keywords = ["osint", "cli", "security", "whois", "rdap", "ip", "domain"]
+dependencies = [
+  "httpx>=0.27.0",
+  "pydantic>=2.7.0",
+  "rich>=13.7.0",
+  "pyyaml>=6.0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/tspry/wib"
+Repository = "https://github.com/tspry/wib"
+
+[project.scripts]
+wib = "wib.main:main"
+
+[tool.setuptools.package-data]
+wib = ["py.typed"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["wib*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "SIM", "PL", "C90"]
+ignore = ["E203", "E266", "E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+no_implicit_optional = true
+plugins = ["pydantic.mypy"]
+
+[tool.bandit]
+skips = ["B101"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "pytest-asyncio>=0.23",
+  "respx>=0.21.1",
+  "coverage>=7.5",
+  "mypy>=1.10",
+  "ruff>=0.5.5",
+  "black>=24.8.0",
+  "isort>=5.13.2",
+  "bandit>=1.7.9",
+  "pre-commit>=3.7.0",
+  "types-PyYAML>=6.0.12",
+  "build>=1.2.1",
+  "twine>=5.1.1",
+]
+all = []
