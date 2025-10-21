@@ -1,49 +1,39 @@
 from __future__ import annotations
 
+import re
+from importlib import metadata as _md
 from pathlib import Path
 
-try:
-    from importlib.metadata import PackageNotFoundError, version
-except Exception:  # pragma: no cover - very old Python
-    PackageNotFoundError = Exception  # type: ignore[assignment]
-
-    def version(distribution_name: str) -> str:  # type: ignore[misc]
-        return "0.0.0"
+PYPROJECT_VERSION_PATTERN = re.compile(
+    r"\[project\].*?^version\s*=\s*\"([^\"]+)\"", re.DOTALL | re.MULTILINE
+)
 
 
-try:  # Python 3.11+
-    import tomllib as _tomllib  # type: ignore[attr-defined]
-except Exception:  # pragma: no cover - optional
-    _tomllib = None  # type: ignore[assignment]
+def _read_pyproject_version() -> str | None:
+    here = Path(__file__).resolve()
+    for parent in here.parents:
+        pp = parent / "pyproject.toml"
+        if pp.is_file():
+            try:
+                text = pp.read_text(encoding="utf-8")
+            except OSError:
+                return None
+            m = PYPROJECT_VERSION_PATTERN.search(text)
+            if m:
+                return m.group(1)
+            break
+    return None
 
 
 def _detect_version() -> str:
-    # Prefer installed distribution version
+    # Prefer installed distribution version; fall back to pyproject when running from source.
     try:
-        return version("wib-osint")
-    except PackageNotFoundError:
-        # Likely running from source; try reading pyproject.toml
-        pass
-    except Exception:
-        pass
-
-    if _tomllib is not None:
-        here = Path(__file__).resolve()
-        for parent in here.parents:
-            pp = parent / "pyproject.toml"
-            if pp.is_file():
-                try:
-                    with open(pp, "rb") as f:
-                        data = _tomllib.load(f)  # type: ignore[arg-type]
-                    v = data.get("project", {}).get("version")
-                    if isinstance(v, str) and v:
-                        # Mark as a local source build
-                        return f"{v}+local"
-                except Exception:
-                    break
-                break
-    # Ultimate fallback
-    return "0.0.0+local"
+        return _md.version("wib-osint")
+    except _md.PackageNotFoundError:
+        pv = _read_pyproject_version()
+        if pv:
+            return f"{pv}+local"
+        return "0.0.0+local"
 
 
 __version__ = _detect_version()

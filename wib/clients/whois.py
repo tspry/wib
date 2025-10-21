@@ -94,7 +94,7 @@ class Port43WhoisClient:
         for fmt in formats:
             try:
                 return datetime.strptime(value, fmt)
-            except Exception:
+            except ValueError:
                 continue
         # Fallback: try to parse ISO-ish by replacing Z
         try:
