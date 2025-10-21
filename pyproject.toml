@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wib-osint"
-version = "0.1.1"
+version = "0.1.3"
 description = "Passive OSINT lookups for IPs and domains with a clean terminal UI"
 readme = "README.md"
 requires-python = ">=3.10"

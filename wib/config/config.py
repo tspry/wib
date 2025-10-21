@@ -8,6 +8,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
+from .. import __version__
+
 
 class OutputFormat(str, Enum):
     rich = "rich"
@@ -77,6 +79,7 @@ def _merge_env(envfile_vars: dict[str, str]) -> None:
 def _parse_args(argv: Iterable[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(prog="wib", description="Passive OSINT lookups for IPs and domains")
     p.add_argument("entities", nargs="*", help="IPs or domains/FQDNs (defanged ok)")
+    p.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
     p.add_argument(
         "-A",
         "--all",
