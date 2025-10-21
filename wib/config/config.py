@@ -48,6 +48,7 @@ class AppConfig:
     geo_service: GeoService = GeoService.ipwhois
     verbosity: int = 0  # -v/-q counts
     keys: Keys = field(default_factory=Keys)
+    show_dns: bool = False
 
 
 def _load_envfile() -> dict[str, str]:
@@ -93,6 +94,7 @@ def _parse_args(argv: Iterable[str]) -> argparse.Namespace:
     p.add_argument("--no-color", action="store_true")
     p.add_argument("--timeout", type=float, default=10.0)
     p.add_argument("--no-virustotal", action="store_true")
+    p.add_argument("--dns", dest="show_dns", action="store_true", help="Resolve DNS records")
     p.add_argument(
         "--output", choices=[f.value for f in OutputFormat], default=OutputFormat.rich.value
     )
@@ -141,5 +143,6 @@ def load_config(argv: Iterable[str] | None = None) -> AppConfig:
         geo_service=GeoService(ns.geo_service),
         verbosity=verbosity,
         keys=_collect_keys(),
+        show_dns=bool(ns.show_dns),
     )
     return cfg

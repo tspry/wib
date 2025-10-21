@@ -40,6 +40,20 @@ class DomainWhois(BaseModel):
     expires: datetime | None = None
 
 
+class DnsRecordMx(BaseModel):
+    preference: int
+    exchange: str
+
+
+class DomainDns(BaseModel):
+    a: list[str] | None = None
+    aaaa: list[str] | None = None
+    cname: list[str] | None = None
+    ns: list[str] | None = None
+    mx: list[DnsRecordMx] | None = None
+    txt: list[str] | None = None
+
+
 class VtDomainSummary(BaseModel):
     categories: dict[str, str] | None = None
     reputation: int | None = None
@@ -50,5 +64,6 @@ class VtDomainSummary(BaseModel):
 class DomainData(BaseModel):
     domain: str
     whois: DomainWhois | None = None
+    dns: DomainDns | None = None
     vt: VtDomainSummary | None = None
     urlhaus: dict[str, Any] | None = None

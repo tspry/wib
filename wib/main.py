@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import importlib
 import json
+import os
 import sys
 from typing import Any
 
@@ -30,9 +31,11 @@ async def _process_entity(entity: str, cfg: AppConfig) -> tuple[str, IpData | Do
             await ip_handler.aclose()
         return kind, data
     else:
-        dom_handler = DomainHandler(timeout=cfg.timeout)
+        dom_handler = DomainHandler(
+            timeout=cfg.timeout, ip2whois_key=os.getenv("IP2WHOIS_API_KEY") or None
+        )
         try:
-            data = await dom_handler.fetch(value)
+            data = await dom_handler.fetch(value, include_dns=cfg.show_dns)
         finally:
             await dom_handler.aclose()
         return kind, data
