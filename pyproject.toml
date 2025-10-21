@@ -3,7 +3,7 @@ requires = ["setuptools>=67", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wib"
+name = "wib-osint"
 version = "1.0.0"
 description = "Passive OSINT lookups for IPs and domains with a clean terminal UI"
 readme = "README.md"
